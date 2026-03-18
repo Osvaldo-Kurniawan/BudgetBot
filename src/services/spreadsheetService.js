@@ -9,12 +9,33 @@ require("dotenv").config();
 const { MESSAGES } = require("../config/constants");
 const { logError } = require("../utils/logger");
 
-// Load service account from .env with fallback
+// Load service account from .env with validation
 const getServiceAccount = () => {
-  const privateKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY;
-  if (!privateKey) {
-    throw new Error("❌ GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY is not set in environment variables");
+  const requiredVars = [
+    "GOOGLE_SERVICE_ACCOUNT_PROJECT_ID",
+    "GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY_ID",
+    "GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY",
+    "GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL",
+    "GOOGLE_SERVICE_ACCOUNT_CLIENT_ID",
+    "GOOGLE_SERVICE_ACCOUNT_AUTH_URI",
+    "GOOGLE_SERVICE_ACCOUNT_TOKEN_URI",
+  ];
+
+  const missingVars = requiredVars.filter(v => !process.env[v]);
+  
+  if (missingVars.length > 0) {
+    console.error(
+      "❌ CONFIGURATION ERROR\n\n" +
+      "Missing environment variables in Railway:\n" +
+      missingVars.map(v => `  - ${v}`).join("\n") + 
+      "\n\n" +
+      "FIX: Go to Railway Dashboard → Variables tab → Add all missing variables\n" +
+      "See RAILWAY_SETUP.md for detailed instructions"
+    );
+    throw new Error(`Missing ${missingVars.length} environment variable(s): ${missingVars.join(", ")}`);
   }
+
+  const privateKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY;
   
   return {
     type: process.env.GOOGLE_SERVICE_ACCOUNT_TYPE || "service_account",
@@ -25,13 +46,19 @@ const getServiceAccount = () => {
     client_id: process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_ID,
     auth_uri: process.env.GOOGLE_SERVICE_ACCOUNT_AUTH_URI,
     token_uri: process.env.GOOGLE_SERVICE_ACCOUNT_TOKEN_URI,
-    auth_provider_x509_cert_url: process.env.GOOGLE_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL,
-    client_x509_cert_url: process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL,
-    universe_domain: process.env.GOOGLE_SERVICE_ACCOUNT_UNIVERSE_DOMAIN,
+    auth_provider_x509_cert_url: process.env.GOOGLE_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL || "",
+    client_x509_cert_url: process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL || "",
+    universe_domain: process.env.GOOGLE_SERVICE_ACCOUNT_UNIVERSE_DOMAIN || "googleapis.com",
   };
 };
 
-const serviceAccount = getServiceAccount();
+let serviceAccount;
+try {
+  serviceAccount = getServiceAccount();
+} catch (error) {
+  console.error("Failed to initialize service account:", error.message);
+  process.exit(1);
+}
 
 const serviceAccountAuth = new JWT({
   email: serviceAccount.client_email,
