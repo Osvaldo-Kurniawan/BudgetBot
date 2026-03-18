@@ -12,6 +12,7 @@ const qrcode = require("qrcode-terminal");
 const { BOT_SETTINGS } = require("./config/constants");
 const { registerMessageHandlers } = require("./services/whatsappService");
 const { broadcastReminderPengeluaran } = require("./services/broadcastService");
+const { generateQRImage, generateQRDataURL } = require("./utils/qrGenerator");
 
 const startBot = async () => {
   try {
@@ -30,13 +31,25 @@ const startBot = async () => {
     sock.ev.on("creds.update", saveCreds);
 
     // Connection event handler
-    sock.ev.on("connection.update", (update) => {
+    sock.ev.on("connection.update", async (update) => {
       const { connection, lastDisconnect, qr } = update;
 
       if (qr) {
-        console.log("📱 Scan QR berikut untuk login:\n");
-        qrcode.generate(qr, { small: true });
-        console.log(qr);
+        try {
+          console.log("📱 Generating QR code for login...\n");
+          
+          // Display QR in terminal (for quick reference)
+          qrcode.generate(qr, { small: true });
+          
+          // Generate QR as image file
+          const qrImagePath = await generateQRImage(qr, "login");
+          console.log(`✅ QR code saved to: ${qrImagePath}`);
+          console.log("📸 Open the image file or scan the QR above to login\n`);
+          
+        } catch (error) {
+          console.error("⚠️ Error generating QR image:", error);
+          console.log("Fallback: QR text:", qr);
+        }
       }
 
       if (connection === "close") {

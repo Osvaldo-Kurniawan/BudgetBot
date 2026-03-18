@@ -13,6 +13,10 @@ yarn-error.log*
 auth/
 .baileys*
 
+# Generated QR codes
+qr/
+*.png
+
 # OS
 .DS_Store
 Thumbs.db
