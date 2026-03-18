@@ -2,7 +2,10 @@
 
 ## ⚠️ IMPORTANT: Sebelum Deploy!
 
-Railway **tidak bisa** auto-load env vars dari file. Kamu HARUS set manual di Railway Dashboard.
+Railway HANYA perlu:
+1. ✅ **Procfile** - untuk tahu cara start bot
+2. ✅ **package.json** - untuk install dependencies
+3. ✅ **Environment Variables** - HARUS di-set manual di Railway Dashboard
 
 ---
 

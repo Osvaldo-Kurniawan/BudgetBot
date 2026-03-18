@@ -60,15 +60,13 @@ railway variables
 ## ✅ Files Ready for Deployment
 
 ```
-✓ Procfile              - Start command
-✓ railway.json          - Railway config  
-✓ railway.toml          - Railway build config
+✓ Procfile              - Start command (Railway auto-detects this)
 ✓ package.json          - Dependencies
 ✓ .env                  - Local backup (NOT committed)
 ✓ .gitignore            - Secure (credentials tidak dicommit)
 ```
 
-**Note:** Environment variables HARUS di-set manual di Railway Dashboard!
+**Railway auto-detects Node.js + uses Procfile → No need for complex config files!**
 
 ---
 
