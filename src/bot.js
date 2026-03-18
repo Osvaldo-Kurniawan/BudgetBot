@@ -44,7 +44,7 @@ const startBot = async () => {
           // Generate QR as image file
           const qrImagePath = await generateQRImage(qr, "login");
           console.log(`✅ QR code saved to: ${qrImagePath}`);
-          console.log("📸 Open the image file or scan the QR above to login\n`);
+          console.log(`📸 Open the image file or scan the QR above to login\n`);
           
         } catch (error) {
           console.error("⚠️ Error generating QR image:", error);
