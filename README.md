@@ -2,8 +2,6 @@
 
 BudgetBot adalah WhatsApp bot untuk manajemen pengeluaran harian dengan AI, income bulanan, dan target tabungan berbasis Google Spreadsheet.
 
-**Status:** ✅ Refactored & Production-Ready
-
 ## 🎯 Fitur Utama
 
 - ✅ Catat pengeluaran via chat WhatsApp
