@@ -14,9 +14,25 @@ Semua config sudah siap! Sekarang tinggal final steps:
 6. Railway akan auto-detect `Procfile` dan deploy!
 7. Tunggu ~2 menit build complete
 
-**Environment Variables (Auto-loaded dari `railway.toml`):**
-- Semua sudah tercetup di `railway.toml` ✓
-- Railway akan auto-import saat deploy
+### ⚙️ PENTING: Set Environment Variables
+
+Setelah deploy, go to Railway dashboard → **Variables tab** dan set semua ini:
+
+**Copy dari `.env` file kamu langsung paste ke Railway Variables:**
+- `GOOGLE_SHEET_ID`
+- `GOOGLE_SERVICE_ACCOUNT_TYPE`
+- `GOOGLE_SERVICE_ACCOUNT_PROJECT_ID`
+- `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY_ID`
+- `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY` (⚠️ include `\n` untuk newlines)
+- `GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL`
+- `GOOGLE_SERVICE_ACCOUNT_CLIENT_ID`
+- `GOOGLE_SERVICE_ACCOUNT_AUTH_URI`
+- `GOOGLE_SERVICE_ACCOUNT_TOKEN_URI`
+- `GOOGLE_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL`
+- `GOOGLE_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL`
+- `GOOGLE_SERVICE_ACCOUNT_UNIVERSE_DOMAIN`
+
+Setelah set variables, **Redeploy** atau bot akan auto-restart.
 
 ---
 
@@ -33,6 +49,10 @@ Semua config sudah siap! Sekarang tinggal final steps:
 
 # Step 3: Deploy!
 railway up
+
+# Step 4: Set variables
+railway variables
+# Paste semua vars dari .env
 ```
 
 ---
@@ -42,11 +62,13 @@ railway up
 ```
 ✓ Procfile              - Start command
 ✓ railway.json          - Railway config  
-✓ railway.toml          - Environment variables
+✓ railway.toml          - Railway build config
 ✓ package.json          - Dependencies
 ✓ .env                  - Local backup (NOT committed)
-✓ .gitignore            - Secure config (Procfile protected)
+✓ .gitignore            - Secure (credentials tidak dicommit)
 ```
+
+**Note:** Environment variables HARUS di-set manual di Railway Dashboard!
 
 ---
 
